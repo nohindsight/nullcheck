@@ -1,0 +1,4 @@
+include LICENSE README.md CHANGELOG.md CONTRIBUTING.md SECURITY.md COVERAGE.md REPLAY_FORMAT.md validate.py
+recursive-include tests *.py
+recursive-include fixtures *.py
+recursive-include examples *.py *.csv

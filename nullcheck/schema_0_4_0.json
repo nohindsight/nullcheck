@@ -1,0 +1,626 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "nullcheck private replay record 0.4.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.4.0"
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "const": "indicator_prefix_invariance"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "runner_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "runner_version"
+      ]
+    },
+    "adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "framework_version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "framework_version"
+      ]
+    },
+    "status": {
+      "enum": [
+        "NO_DIVERGENCE_OBSERVED",
+        "DIVERGENCE_OBSERVED",
+        "NOT_ASSESSED",
+        "ERROR"
+      ]
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "comparison_scope": {
+          "enum": [
+            "cutoff_only",
+            "prefix_valid"
+          ]
+        },
+        "raw_prefix_recomputed": {
+          "type": "boolean"
+        },
+        "reset_description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "repeatability": {
+          "enum": [
+            "CONFIRMED",
+            "FAILED",
+            "NOT_ASSESSED",
+            "PARTIAL"
+          ]
+        },
+        "warmup_rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "terminal_excluded_rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "atol": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1e+308
+        },
+        "rtol": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1e+308
+        },
+        "availability_assumption": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "calendar_adjustment_assumption": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "maxItems": 100
+        },
+        "warmup_policy": {
+          "const": "AUDIT_ALL_ROWS_SKIP_MATCHING_NAN"
+        },
+        "boolean_channels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "maxItems": 1000,
+          "uniqueItems": true
+        },
+        "categorical_channels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "maxItems": 1000,
+          "uniqueItems": true
+        },
+        "categorical_encoding": {
+          "const": "BLAKE2B_53_CANONICAL_V1_EXACT_COLLISION_CHECKED"
+        }
+      },
+      "required": [
+        "comparison_scope",
+        "raw_prefix_recomputed",
+        "reset_description",
+        "seed",
+        "repeatability",
+        "warmup_rows",
+        "terminal_excluded_rows",
+        "atol",
+        "rtol",
+        "availability_assumption",
+        "calendar_adjustment_assumption",
+        "limitations",
+        "warmup_policy",
+        "boolean_channels",
+        "categorical_channels",
+        "categorical_encoding"
+      ]
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "input_rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "minItems": 1,
+          "maxItems": 1000,
+          "uniqueItems": true
+        },
+        "planned_prefix_lengths": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "minItems": 1,
+          "maxItems": 128,
+          "uniqueItems": true
+        },
+        "max_callback_runs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "actual_callback_runs": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "input_rows",
+        "channels",
+        "planned_prefix_lengths",
+        "max_callback_runs",
+        "actual_callback_runs"
+      ]
+    },
+    "probes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/probe"
+      },
+      "maxItems": 128
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/file"
+      },
+      "maxItems": 1000
+    },
+    "reproduction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "enum": [
+            "AVAILABLE",
+            "UNAVAILABLE"
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "argv": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "maxItems": 100
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "maxItems": 100
+        },
+        "reducer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "state": {
+              "enum": [
+                "NOT_ATTEMPTED",
+                "REPRODUCED_SMALLER_CASE",
+                "ATTEMPTED_NO_REDUCTION"
+              ]
+            },
+            "method": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "callback_runs": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "reproducer_file_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "method",
+            "callback_runs",
+            "reproducer_file_id"
+          ]
+        }
+      },
+      "required": [
+        "availability",
+        "reason",
+        "argv",
+        "environment",
+        "reducer"
+      ]
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "visibility": {
+          "const": "PRIVATE"
+        },
+        "automatic_upload": {
+          "const": false
+        }
+      },
+      "required": [
+        "visibility",
+        "automatic_upload"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "check",
+    "adapter",
+    "status",
+    "reason",
+    "contract",
+    "coverage",
+    "probes",
+    "files",
+    "reproduction",
+    "privacy"
+  ],
+  "$defs": {
+    "range": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "channel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stop": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "channel",
+        "start",
+        "stop"
+      ]
+    },
+    "difference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "channel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "row": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "full_value": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": -1e+308,
+              "maximum": 1e+308
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "prefix_value": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": -1e+308,
+              "maximum": 1e+308
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "kind": {
+          "enum": [
+            "VALUE",
+            "MISSINGNESS"
+          ]
+        },
+        "full_state": {
+          "enum": [
+            "FINITE",
+            "NAN",
+            "POS_INF",
+            "NEG_INF"
+          ]
+        },
+        "prefix_state": {
+          "enum": [
+            "FINITE",
+            "NAN",
+            "POS_INF",
+            "NEG_INF"
+          ]
+        }
+      },
+      "required": [
+        "channel",
+        "row",
+        "full_value",
+        "prefix_value",
+        "kind",
+        "full_state",
+        "prefix_state"
+      ]
+    },
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prefix_length": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "state": {
+          "enum": [
+            "COMPARED",
+            "NOT_ASSESSED",
+            "ERROR",
+            "SKIPPED_BOTH_NAN"
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "compared_ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/range"
+          },
+          "maxItems": 10000
+        },
+        "skipped_ranges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "channel": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "stop": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              }
+            },
+            "required": [
+              "channel",
+              "start",
+              "stop",
+              "reason"
+            ]
+          },
+          "maxItems": 10000
+        },
+        "divergence_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "first_divergence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/difference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "prefix_length",
+        "state",
+        "reason",
+        "compared_ranges",
+        "skipped_ranges",
+        "divergence_count",
+        "first_divergence"
+      ]
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "role": {
+          "enum": [
+            "INPUT",
+            "SOURCE",
+            "CONFIG",
+            "ENVIRONMENT",
+            "REPRODUCER"
+          ]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500,
+              "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*:).+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "sha256",
+        "path"
+      ]
+    }
+  }
+}

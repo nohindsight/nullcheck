@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+nc-venv/
+nc-out/
+bt-out/
+demo.csv

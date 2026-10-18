@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nullcheck"
+version = "0.2.5"
+description = "Find look-ahead leaks by re-running your feature code on truncated history."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "No Hindsight" }]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "pandas>=2.0", "jsonschema>=4.18"]
+keywords = ["backtesting", "look-ahead bias", "data leakage", "trading", "pandas", "testing"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Topic :: Software Development :: Testing",
+]
+
+[project.urls]
+Homepage = "https://github.com/nohindsight/nullcheck"
+Issues = "https://github.com/nohindsight/nullcheck/issues"
+Changelog = "https://github.com/nohindsight/nullcheck/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+backtesting = ["backtesting==0.6.6"]  # AGPL-3.0 (upstream classifier says or-later); see README "Licences"
+
+[tool.setuptools]
+packages = ["nullcheck", "nullcheck.adapters"]
+
+[tool.setuptools.package-data]
+nullcheck = ["schema_0_2_0.json", "schema_0_3_0.json", "schema_0_4_0.json"]
